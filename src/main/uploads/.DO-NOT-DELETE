@@ -1,0 +1,4 @@
+PROBLEM:
+    When running on gitlab-ci , empty folders will not be created
+FIX:
+    We created this kind of files to guarantee that directories are created

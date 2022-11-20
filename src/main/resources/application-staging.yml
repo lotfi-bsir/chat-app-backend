@@ -1,0 +1,4 @@
+spring:
+  datasource:
+    password: ${VAPEX_DATABASE_PASSWORD}
+    url: jdbc:mysql://vapex-database:${VAPEX_DATABASE_PORT}/vapex?createDatabaseIfNotExist=true

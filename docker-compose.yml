@@ -1,0 +1,37 @@
+version: "3.7"
+services:
+  vapex-app:
+    build: .
+    container_name: vapex
+    ports:
+      - "${VAPEX_APPLICATION_PORT}:8080"
+    depends_on:
+      - vapex-database
+    environment:
+      VAPEX_APPLICATION_PORT: ${VAPEX_APPLICATION_PORT}
+      VAPEX_DATABASE_HOST: vapex-database  # static value since it runs on shared docker network
+      VAPEX_DATABASE_PORT: 3306  # static value since it runs on shared docker network
+      VAPEX_DATABASE_PASSWORD: ${VAPEX_DATABASE_PASSWORD}
+    volumes:
+      - /root/vapex/log:/log
+      - /root/vapex/uploads:/src/main/uploads
+    networks:
+      - vapex-network
+
+  vapex-database:
+    image: mysql:8
+    container_name: vapex-mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: vapex
+      MYSQL_ROOT_PASSWORD: ${VAPEX_DATABASE_PASSWORD}
+    ports:
+      - "${VAPEX_DATABASE_PORT}:3306"
+    volumes:
+      - /var/lib/mysql/vapex-data:/var/lib/mysql
+    networks:
+      - vapex-network
+
+networks:
+  vapex-network:
+    driver: bridge

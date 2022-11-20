@@ -1,0 +1,143 @@
+image: alpine:3.15.0
+stages:
+  - Package
+  - SonarQube
+  - Deploy
+  - Smoke Test
+
+variables:
+  DOCKER_RUNNER: docker
+  SHELL_RUNNER: shell
+  URL_DEPLOYMENT: http://$VAPEX_HOST:$VAPEX_DATABASE_PORT
+
+
+.only-prod:
+  only:
+    - prod
+
+.only-staging:
+  only:
+    - setup
+
+.only-deployment-pipelines:
+  only:
+    - setup
+    - prod
+
+.only-all-pipelines:
+  only:
+    - setup
+    - prod
+    - dev
+    - merge_requests
+
+.build_maven: &build_maven
+  image: maven:3.8-openjdk-11
+  timeout: 30m
+  variables:
+    MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+  cache:
+    paths:
+      - .m2/repository
+
+######################
+# PACKAGE
+######################
+
+.base package: &package
+  <<: *build_maven
+  stage: Package
+  tags:
+    - $DOCKER_RUNNER
+  script:
+    - mvn clean package -DskipTests $MAVEN_OPTS
+  artifacts:
+    paths:
+      - ./target/*.jar
+
+Package Staging:
+  <<: *package
+  environment: STAGING
+  extends:
+    - .only-staging
+
+Package Prod:
+  <<: *package
+  environment: PROD
+  extends:
+    - .only-prod
+
+######################
+# SONARQUBE
+######################
+
+sonarqube-check:
+  <<: *build_maven
+  stage: SonarQube
+  tags:
+    - $DOCKER_RUNNER
+  extends:
+    - .only-all-pipelines
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script:
+    - mvn verify sonar:sonar -Dsonar.projectKey=Vapex $MAVEN_OPTS
+  allow_failure: false
+
+
+######################
+# DEPLOY
+######################
+.run docker image: &deploy
+  image: docker
+  stage: Deploy
+  services:
+    - docker:dind
+  tags:
+    - $SHELL_RUNNER
+  environment:
+    name: $ENV_NAME
+    url: $URL
+  before_script:
+    - export VAPEX_APPLICATION_PORT=$VAPEX_APPLICATION_PORT
+    - export VAPEX_DATABASE_PASSWORD=$VAPEX_DATABASE_PASSWORD
+    - export VAPEX_DATABASE_PORT=$VAPEX_DATABASE_PORT
+    - sudo -E docker-compose down --remove-orphans # remove sudo later
+  script:
+    - sudo -E docker-compose up -d --build vapex-app # remove sudo later
+
+Deploy Staging:
+  <<: *deploy
+  extends:
+    - .only-staging
+  variables:
+    PROFILE: staging
+    ENV_NAME: STAGING
+  environment:
+    name: $ENV_NAME
+
+######################
+# SMOKE TEST
+######################
+
+.smoke test: &smoke_test
+  stage: Smoke Test
+  retry:
+    max: 2
+    when: always
+  tags:
+    - $DOCKER_RUNNER
+  before_script:
+    - apk add --no-cache curl # install curl
+  script:
+    - curl "$URL_DEPLOYMENT/management/health" | tac | tac | grep -q "UP" && echo "deployment successfull" || sleep 40s
+
+Test Deployment Staging:
+  <<: *smoke_test
+  extends: .only-staging
+  environment: STAGING

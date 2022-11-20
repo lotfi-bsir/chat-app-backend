@@ -1,0 +1,41 @@
+spring:
+  profiles:
+    active: dev
+  datasource:
+    type: com.mysql.cj.jdbc.MysqlDataSource
+    username: root
+    password: ${VAPEX_DATABASE_PASSWORD}
+    url: jdbc:mysql://${VAPEX_DATABASE_HOST}:${VAPEX_DATABASE_PORT}/vapex?createDatabaseIfNotExist=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jackson:
+    default-property-inclusion: non_null
+  config:
+    import: optional:file:.env[.properties]
+
+  liquibase:
+    enabled: false
+    change-log: liquibase/master.xml
+    drop-first: false
+
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        enable_lazy_load_no_trans: true
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 5MB
+      max-request-size: 215MB
+      file-size-threshold: 2KB
+
+
+management:
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: [ '*' ]
