@@ -39,3 +39,14 @@ management:
       base-path: /management
       exposure:
         include: [ '*' ]
+
+server:
+  servlet:
+    context-path: /api
+
+vapex:
+  security:
+    token:
+      secret-key: PLACE_HOLDER_KEY_PLACE_HOLDER_KEY # SECURITY_SECRET_KEY
+      access-token-expiration: 30 # minutes
+      refresh-token-expiration: 262800 # minutes -> 6 months

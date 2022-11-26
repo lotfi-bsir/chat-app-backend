@@ -17,16 +17,16 @@ variables:
 
 .only-staging:
   only:
-    - setup
+    - boilerplate
 
 .only-deployment-pipelines:
   only:
-    - setup
+    - boilerplate
     - prod
 
 .only-all-pipelines:
   only:
-    - setup
+    - boilerplate
     - prod
     - dev
     - merge_requests
