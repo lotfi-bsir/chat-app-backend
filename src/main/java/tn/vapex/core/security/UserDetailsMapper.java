@@ -9,10 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 
-public abstract class UserDetailsMapper {
-
-    private UserDetailsMapper() {
-    }
+public interface UserDetailsMapper {
 
     public static UserDetails userToUserDetails(User user) {
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();

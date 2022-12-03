@@ -3,7 +3,7 @@ package tn.vapex.core.properties;
 import lombok.Data;
 
 @Data
-public abstract class SecurityProperties {
+public class SecurityProperties {
     private Token token = new Token();
 
     @Data

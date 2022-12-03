@@ -50,3 +50,9 @@ vapex:
       secret-key: PLACE_HOLDER_KEY_PLACE_HOLDER_KEY # SECURITY_SECRET_KEY
       access-token-expiration: 30 # minutes
       refresh-token-expiration: 262800 # minutes -> 6 months
+  sms:
+    enabled: false
+    app-identifier: YLxu1Cu1rro
+    api-url: https://www.tunisiesms.tn/client/Api/Api.aspx
+    api-key: yDsirmd31t/-/fpktbJLI4rkXWdn7oTU880Qe38RVL/-/paFJ/kxjj4/-/LcSXTHoSaZ9neibHYWVY3yRKRLncngPuslzWoO5B88hVpo6pG1Mr1IM= # SMS_SENDER
+    sender: Tbiby.Tn

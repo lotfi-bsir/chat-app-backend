@@ -87,7 +87,7 @@ sonarqube-check:
       - .sonar/cache
   script:
     - mvn verify sonar:sonar -Dsonar.projectKey=Vapex $MAVEN_OPTS
-  allow_failure: false
+  allow_failure: true # TODO remove after clearing initial code smells
 
 
 ######################

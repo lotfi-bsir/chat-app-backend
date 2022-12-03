@@ -15,17 +15,17 @@ import java.util.Objects;
 @MappedSuperclass
 public abstract class BaseEntity implements Serializable {
 
-    @Column(name = "created_at")
+    @Column
     @CreationTimestamp
     protected Date createdAt;
 
-    @Column(name = "updated_at")
+    @Column
     @UpdateTimestamp
     protected Date updatedAt;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column
     private Long id;
 
     @PrePersist // In case @CreationTimestamp failed to init createdAt
