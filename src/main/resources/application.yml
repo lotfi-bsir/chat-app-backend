@@ -56,3 +56,7 @@ vapex:
     api-url: https://www.tunisiesms.tn/client/Api/Api.aspx
     api-key: yDsirmd31t/-/fpktbJLI4rkXWdn7oTU880Qe38RVL/-/paFJ/kxjj4/-/LcSXTHoSaZ9neibHYWVY3yRKRLncngPuslzWoO5B88hVpo6pG1Mr1IM= # SMS_SENDER
     sender: Tbiby.Tn
+  verification-code:
+    max-attempts: 5
+    expiration-duration: 5 # 5 minutes
+    code-digits: 4 # number between 1 and 10

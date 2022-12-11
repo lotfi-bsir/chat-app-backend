@@ -19,12 +19,11 @@ public class VerificationCodeSmsSender extends SmsSender {
     private static VapexProperties vapexProperties;
     private int code;
     private String phone;
-    private Locale locale;
+    private final Locale locale = Locale.FR;
 
-    public VerificationCodeSmsSender(String phone, int code, Locale locale) {
+    public VerificationCodeSmsSender(String phone, int code) {
         this.code = code;
         this.phone = phone;
-        this.locale = locale;
     }
 
     @Override

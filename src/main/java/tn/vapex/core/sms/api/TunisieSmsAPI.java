@@ -3,7 +3,10 @@ package tn.vapex.core.sms.api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.web.client.RestTemplate;
+import tn.vapex.core.fetcher.FetchedBean;
+import tn.vapex.core.fetcher.UseFetchedBeans;
 import tn.vapex.core.properties.SmsProperties;
+import tn.vapex.core.properties.VapexProperties;
 import tn.vapex.core.sms.PlusEncoderInterceptor;
 import tn.vapex.core.sms.SmsMessage;
 
@@ -11,31 +14,27 @@ import tn.vapex.core.sms.SmsMessage;
  * @apiNote Tunisie sms has a limit of 66 character per message
  */
 @Slf4j
+@UseFetchedBeans
 public class TunisieSmsAPI implements SmsAPI {
 
-    /**
-     * Properties initialized on @PostConstruct from {@link SmsProperties}
-     */
-    private static SmsProperties smsProperties;
 
-    public static void setSmsProperties(SmsProperties smsProperties) {
-        TunisieSmsAPI.smsProperties = smsProperties;
-    }
+    @FetchedBean
+    private static VapexProperties vapexProperties;
 
     @Override
     public void commitSms(SmsMessage smsMessage) {
-        if (!smsProperties.isEnabled()) {
+        if (!vapexProperties.getSms().isEnabled()) {
             log.warn("SMS DISABLED: SMS NOT SENT");
             return;
         }
 
         StringBuilder tunisieSmsUrlBuilder = new StringBuilder();
-        tunisieSmsUrlBuilder.append(smsProperties.getApiUrl());
+        tunisieSmsUrlBuilder.append(vapexProperties.getSms().getApiUrl());
         tunisieSmsUrlBuilder.append("?fct=sms");
-        tunisieSmsUrlBuilder.append("&key=").append(smsProperties.getApiKey());
+        tunisieSmsUrlBuilder.append("&key=").append(vapexProperties.getSms().getApiKey());
         tunisieSmsUrlBuilder.append("&mobile=").append(smsMessage.getPhone());
         tunisieSmsUrlBuilder.append("&sms=").append(smsMessage.getContent());
-        tunisieSmsUrlBuilder.append("&sender=").append(smsProperties.getSender());
+        tunisieSmsUrlBuilder.append("&sender=").append(vapexProperties.getSms().getSender());
 
 
         try {

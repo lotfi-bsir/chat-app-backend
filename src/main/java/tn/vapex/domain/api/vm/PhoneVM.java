@@ -1,17 +1,16 @@
-package tn.vapex.core.security.jwt;
+package tn.vapex.domain.api.vm;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import tn.vapex.domain.validators.phone.TunisianPhone;
 
-import javax.validation.constraints.NotNull;
-
 @Getter
 @Setter
-public class LoginVM {
-    @NotNull
+@AllArgsConstructor
+@NoArgsConstructor
+public class PhoneVM {
     @TunisianPhone
     private String phone;
-    @NotNull
-    private Integer code;
 }

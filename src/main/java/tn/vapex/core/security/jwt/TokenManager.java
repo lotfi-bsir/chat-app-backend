@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import tn.vapex.core.properties.VapexProperties;
 import tn.vapex.core.security.UserApplicationService;
+import tn.vapex.domain.api.vm.JWTToken;
 
 import java.security.Key;
 import java.util.Date;
@@ -24,10 +25,10 @@ import static tn.vapex.core.constants.SecurityConstants.BEARER_PREFIX;
 @Component
 public class TokenManager {
 
-    private final UserApplicationService userApplicationService;
     protected final Key accessTokenKey;
     protected final Key refreshTokenKey;
     protected final VapexProperties properties;
+    private final UserApplicationService userApplicationService;
 
 
     @Autowired
@@ -40,7 +41,7 @@ public class TokenManager {
     }
 
 
-    public String generateAccessToken(String phone) {
+    private String generateAccessToken(String phone) {
         UserDetails user = userApplicationService.loadUserByUsername(phone);
         return BEARER_PREFIX + Jwts.builder()
                 .setSubject(user.getUsername())
@@ -57,7 +58,7 @@ public class TokenManager {
                 .map(GrantedAuthority::getAuthority).collect(Collectors.toList());
     }
 
-    public String generateRefreshToken(String phone) {
+    private String generateRefreshToken(String phone) {
         UserDetails user = userApplicationService.loadUserByUsername(phone);
         return BEARER_PREFIX + Jwts.builder()
                 .setSubject(user.getUsername())
@@ -77,6 +78,10 @@ public class TokenManager {
     public String extractToken(@NonNull String authorizationHeader) {
         if (!authorizationHeader.startsWith(BEARER_PREFIX)) return authorizationHeader;
         return authorizationHeader.substring(BEARER_PREFIX.length());
+    }
+
+    public JWTToken generateAccessAndRefreshToken(String phone) {
+        return new JWTToken(this.generateAccessToken(phone), this.generateRefreshToken(phone));
     }
 
     public String getUserPhoneByToken(String token, TokenType tokenType) {
