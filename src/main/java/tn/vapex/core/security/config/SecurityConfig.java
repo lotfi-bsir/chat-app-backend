@@ -43,11 +43,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(daoAuthenticationProvider());
     }
 
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring()
-                .antMatchers(HttpMethod.POST,"/auth/**");
-    }
+//    @Override
+//    public void configure(WebSecurity web) {
+//        web.ignoring()
+//                .antMatchers(HttpMethod.POST, "/auth/**")
+//                .antMatchers("/developmental/**");
+//    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -56,9 +57,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .cors()
-                .and()
-                .authorizeRequests()
-                .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JWTFilter(handlerExceptionResolver, tokenManager), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()

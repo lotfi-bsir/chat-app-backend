@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.vapex.core.security.AuthFacade;
 import tn.vapex.core.security.jwt.LoginVM;
+import tn.vapex.domain.api.dtos.UserDto;
+import tn.vapex.domain.api.mappers.UserMapper;
 import tn.vapex.domain.api.vm.JWTToken;
 import tn.vapex.domain.api.vm.PhoneVM;
 import tn.vapex.domain.api.vm.RefreshTokenVM;
@@ -20,6 +22,7 @@ public class AuthController {
 
     private final AuthService authService;
     private final AuthFacade authFacade;
+    private final UserMapper userMapper;
 
     @PostMapping("login")
     public ResponseEntity<Void> loginOrRegister(@RequestBody @Valid PhoneVM phoneVM) {
@@ -38,7 +41,7 @@ public class AuthController {
     }
 
     @GetMapping("me")
-    public ResponseEntity<User> getAuthenticatedUser(){
-        return ResponseEntity.ok(this.authFacade.getAuthenticated());
+    public ResponseEntity<UserDto> getAuthenticatedUser(){
+        return ResponseEntity.ok(userMapper.toDto(this.authFacade.getAuthenticated()));
     }
 }
