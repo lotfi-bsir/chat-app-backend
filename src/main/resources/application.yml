@@ -60,3 +60,9 @@ vapex:
     max-attempts: 5
     expiration-duration: 5 # 5 minutes
     code-digits: 4 # number between 1 and 10
+  file:
+    # See ResourcesWebConfig if you want to change base upload location
+    base-dir: ./src/main
+    default-path: /uploads/public/files/
+    delivery-man: /uploads/public/images/delivery-man/
+    product: /uploads/public/images/products/

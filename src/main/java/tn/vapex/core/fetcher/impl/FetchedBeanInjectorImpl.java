@@ -2,10 +2,14 @@ package tn.vapex.core.fetcher.impl;
 
 import com.google.common.reflect.ClassPath;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
-import tn.vapex.core.fetcher.*;
+import tn.vapex.core.fetcher.BeanFetcherUtils;
+import tn.vapex.core.fetcher.FetchedBean;
+import tn.vapex.core.fetcher.FetchedBeanInjector;
+import tn.vapex.core.fetcher.UseFetchedBeans;
 import tn.vapex.core.fetcher.exceptions.UseFetchedBeanAnnotationMissingException;
 
 import javax.annotation.PostConstruct;
@@ -18,6 +22,7 @@ import java.util.stream.Collectors;
 
 @Component("fetchedBeanInjector")
 @DependsOn("applicationContextInitializer")
+@Slf4j
 public class FetchedBeanInjectorImpl implements FetchedBeanInjector {
 
     public static final String BASE_PACKAGE = "tn.vapex";
@@ -32,7 +37,8 @@ public class FetchedBeanInjectorImpl implements FetchedBeanInjector {
             try {
                 this.checkForUseFetchedBeanAnnotation(field);
                 field.setAccessible(true);
-                FieldUtils.writeStaticField(field,bean);
+                log.info("Injecting a fetched bean \"{}\" in field \"{}.{}\"", bean.getClass().getName(), field.getDeclaringClass(), field.getName());
+                FieldUtils.writeStaticField(field, bean);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }

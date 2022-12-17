@@ -13,4 +13,5 @@ public class VapexProperties {
     private final SecurityProperties security = new SecurityProperties();
     private final SmsProperties sms = new SmsProperties();
     private final VerificationCodeProperties verificationCode = new VerificationCodeProperties();
+    private final FileProperties file = new FileProperties();
 }
