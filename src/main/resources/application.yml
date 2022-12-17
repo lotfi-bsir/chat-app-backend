@@ -66,3 +66,6 @@ vapex:
     default-path: /uploads/public/files/
     delivery-man: /uploads/public/images/delivery-man/
     product: /uploads/public/images/products/
+  data-loader:
+    enabled: true
+    factor: 5

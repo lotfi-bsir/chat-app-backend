@@ -26,6 +26,7 @@ public class UserServiceDevelopmental {
     private final TokenManager tokenManager;
     private final UserMapper userMapper;
 
+
     public UserWithToken createTestUser(String phone, UserRole role) {
         Optional<User> userOptional = userRepository.findByPhone(phone);
         userOptional.ifPresent(userRepository::delete);

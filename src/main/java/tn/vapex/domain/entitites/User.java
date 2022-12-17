@@ -3,6 +3,7 @@ package tn.vapex.domain.entitites;
 import com.google.common.base.Objects;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.FieldNameConstants;
 import tn.vapex.core.security.UserRole;
 import tn.vapex.domain.code.ValidationCode;
 
@@ -13,6 +14,7 @@ import static javax.persistence.CascadeType.ALL;
 @Entity
 @Getter
 @Setter
+@FieldNameConstants
 public class User extends BaseEntity {
     @Column(unique = true, updatable = false, nullable = false)
     private String phone;

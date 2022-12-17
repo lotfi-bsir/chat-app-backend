@@ -1,8 +1,11 @@
 package tn.vapex.domain.api.mappers;
 
+import org.mapstruct.MappingTarget;
+import tn.vapex.domain.entitites.BaseEntity;
+
 import java.util.List;
 
-public interface EntityMapper<E,D> {
+public interface EntityMapper<D, E extends BaseEntity> {
 
     E toEntity(D dto);
 
@@ -10,7 +13,8 @@ public interface EntityMapper<E,D> {
 
     List<E> toEntity(List<D> dtoList);
 
-    List <D> toDto(List<E> entityList);
+    List<D> toDto(List<E> entityList);
 
+    E partialUpdate(D dto, @MappingTarget E entity);
 
 }

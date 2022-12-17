@@ -31,8 +31,8 @@ public class FakeFileFetcher {
     }
 
     private static void initFakeFiles() {
-        files.put(FileType.DELIVERY_MAN, new String[]{"user-1.jpg", "user-2.jpg", "user-3.jpg"});
-        files.put(FileType.PRODUCT, new String[]{"liquide-1.jpg", "liquide-2.jpg", "liquide-3.jpg", "liquide-4.jpg", "liquide-5.jpg", "liquide-6.jpg",});
+        files.put(FileType.DELIVERY_MAN_PHOTO, new String[]{"user-1.jpg", "user-2.jpg", "user-3.jpg"});
+        files.put(FileType.PRODUCT_PHOTO, new String[]{"liquide-1.jpg", "liquide-2.jpg", "liquide-3.jpg", "liquide-4.jpg", "liquide-5.jpg", "liquide-6.jpg",});
         files.put(FileType.ANY, new String[]{"file.png"});
     }
 
@@ -48,6 +48,7 @@ public class FakeFileFetcher {
         String filePath = getRandomFilenameByFileType(type);
         file.setFileUrlType(FileUrlType.RELATIVE);
         file.setFileUrl(filePath);
+        file.setCompletePath(FakerFactory.getInstance().bufferedFaker().file().fileName());
         return fileRepository.save(file);
     }
 

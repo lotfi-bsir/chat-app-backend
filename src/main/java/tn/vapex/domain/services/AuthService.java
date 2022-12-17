@@ -12,6 +12,7 @@ import tn.vapex.domain.code.VerificationCode;
 import tn.vapex.domain.code.VerificationCodeChecker;
 import tn.vapex.domain.commons.Checker;
 import tn.vapex.domain.entitites.User;
+import tn.vapex.domain.exceptions.exceptions.UserBannedException;
 import tn.vapex.domain.exceptions.exceptions.UserNotFoundException;
 import tn.vapex.domain.repositories.UserRepository;
 
@@ -33,6 +34,7 @@ public class AuthService {
             user.setRole(UserRole.ROLE_CLIENT);
         }else {
             user = userOptional.get();
+            this.checkIfUserBanned(user);
         }
         ValidationCode validationCode = new ValidationCode(VerificationCode.generateRandomKey());
         user.setValidationCode(validationCode);
@@ -58,6 +60,10 @@ public class AuthService {
         refreshToken = this.tokenManager.extractToken(refreshToken);
         this.tokenManager.validateToken(refreshToken, TokenType.REFRESH_TOKEN);
         String userPhone = this.tokenManager.getUserPhoneByToken(refreshToken, TokenType.REFRESH_TOKEN);
-      return this.tokenManager.generateAccessAndRefreshToken(userPhone);
+        return this.tokenManager.generateAccessAndRefreshToken(userPhone);
+    }
+
+    public void checkIfUserBanned(User user) {
+        if (user.isBanned()) throw new UserBannedException();
     }
 }

@@ -6,6 +6,6 @@ import tn.vapex.domain.api.mappers.EntityMapper;
 import tn.vapex.domain.storage.CustomFile;
 
 @Mapper(componentModel = "spring")
-public interface CustomFileMapper extends EntityMapper<CustomFile, CustomFileDto> {
+public interface CustomFileMapper extends EntityMapper<CustomFileDto, CustomFile> {
     CustomFileMapper INSTANCE = Mappers.getMapper(CustomFileMapper.class);
 }

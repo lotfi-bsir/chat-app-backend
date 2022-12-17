@@ -1,23 +1,25 @@
 package tn.vapex.domain.api.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.FieldNameConstants;
 import tn.vapex.core.security.UserRole;
+import tn.vapex.domain.entitites.User;
+import tn.vapex.domain.storage.rest.CustomFileDto;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
- * A DTO for the {@link tn.vapex.domain.entitites.User} entity
+ * A DTO for the {@link User} entity
  */
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@Setter
+@FieldNameConstants
 public class UserDto implements Serializable {
-    private Date createdAt;
-    private Date updatedAt;
     private Long id;
     private String phone;
     private UserRole role = UserRole.ROLE_USER;
+    private String firstName;
+    private String lastName;
+    private CustomFileDto photo;
 }

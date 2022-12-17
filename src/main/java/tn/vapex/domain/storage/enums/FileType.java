@@ -10,7 +10,7 @@ public enum FileType {
     /**
      * IMPORTANT: any enum added here must be added to {@link tn.vapex.core.properties.FileProperties}  getPathByFileType(FileType) and {@link tn.selket.developmental.fakers.files.FakeFileFetcher}
      */
-    ANY(AnyExtension.class), DELIVERY_MAN(ImageExtension.class), PRODUCT(ImageExtension.class);
+    ANY(AnyExtension.class), DELIVERY_MAN_PHOTO(ImageExtension.class), PRODUCT_PHOTO(ImageExtension.class);
 
     public static final String DEFAULT_VALUE = "ANY";
     private final Set<String> extensionSet;

@@ -12,9 +12,9 @@ public class FileProperties {
 
     public String getPathByFileType(FileType type) {
         switch (type) {
-            case DELIVERY_MAN:
+            case DELIVERY_MAN_PHOTO:
                 return deliveryMan;
-            case PRODUCT:
+            case PRODUCT_PHOTO:
                 return product;
             default:
                 return defaultPath;

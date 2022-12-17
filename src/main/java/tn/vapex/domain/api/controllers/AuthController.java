@@ -41,7 +41,9 @@ public class AuthController {
     }
 
     @GetMapping("me")
-    public ResponseEntity<UserDto> getAuthenticatedUser(){
-        return ResponseEntity.ok(userMapper.toDto(this.authFacade.getAuthenticated()));
+    public ResponseEntity<UserDto> getAuthenticatedUser() {
+        User user = this.authFacade.getAuthenticated();
+        this.authService.checkIfUserBanned(user);
+        return ResponseEntity.ok(userMapper.toDto(user));
     }
 }
