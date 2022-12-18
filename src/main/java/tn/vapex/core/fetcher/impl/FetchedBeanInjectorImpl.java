@@ -39,7 +39,6 @@ public class FetchedBeanInjectorImpl implements FetchedBeanInjector {
                 log.info("Injecting a fetched bean \"{}\" in field \"{}.{}\"", bean.getClass().getName(), field.getDeclaringClass(), field.getName());
                 FieldUtils.writeStaticField(field, bean);
             } catch (IllegalAccessException e) {
-//                e.printStackTrace();
                 log.warn(e.getMessage());
             }
         });
