@@ -19,7 +19,7 @@ public class VerificationCodeSmsSender extends SmsSender {
     private static VapexProperties vapexProperties;
     private int code;
     private String phone;
-    private final Locale locale = Locale.FR;
+    private static final Locale locale = Locale.FR;
 
     public VerificationCodeSmsSender(String phone, int code) {
         this.code = code;
@@ -30,7 +30,7 @@ public class VerificationCodeSmsSender extends SmsSender {
     @Async
     @SneakyThrows
     public void send() {
-        String message = MessageSourceUtils.fetchMessage("sms.code", this.locale, new Object[]{code});
+        String message = MessageSourceUtils.fetchMessage("sms.code", locale, new Object[]{code});
         SmsMessage sms = new SmsMessage(phone, message + " " + vapexProperties.getSms().getAppIdentifier());
         this.commitSms(sms);
     }

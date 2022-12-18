@@ -13,7 +13,6 @@ import tn.vapex.core.fetcher.UseFetchedBeans;
 import tn.vapex.core.fetcher.exceptions.UseFetchedBeanAnnotationMissingException;
 
 import javax.annotation.PostConstruct;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +31,7 @@ public class FetchedBeanInjectorImpl implements FetchedBeanInjector {
     @SneakyThrows
     public void inject() {
 
-        this.getFieldsWithAnnotation(FetchedBean.class).forEach(field -> {
+        this.getFieldsWithAnnotation().forEach(field -> {
             Object bean = BeanFetcherUtils.getBean(field.getType());
             try {
                 this.checkForUseFetchedBeanAnnotation(field);
@@ -40,7 +39,8 @@ public class FetchedBeanInjectorImpl implements FetchedBeanInjector {
                 log.info("Injecting a fetched bean \"{}\" in field \"{}.{}\"", bean.getClass().getName(), field.getDeclaringClass(), field.getName());
                 FieldUtils.writeStaticField(field, bean);
             } catch (IllegalAccessException e) {
-                e.printStackTrace();
+//                e.printStackTrace();
+                log.warn(e.getMessage());
             }
         });
     }
@@ -60,10 +60,10 @@ public class FetchedBeanInjectorImpl implements FetchedBeanInjector {
                 .collect(Collectors.toList());
     }
 
-    private List<Field> getFieldsWithAnnotation(Class<? extends Annotation> annotation) {
+    private List<Field> getFieldsWithAnnotation() {
         List<Class<?>> projectClasses = this.getProjectClasses();
         List<Field> fields = new ArrayList<>();
-        projectClasses.forEach(clazz -> fields.addAll(FieldUtils.getFieldsListWithAnnotation(clazz, annotation)));
+        projectClasses.forEach(clazz -> fields.addAll(FieldUtils.getFieldsListWithAnnotation(clazz, FetchedBean.class)));
 
         return fields;
     }

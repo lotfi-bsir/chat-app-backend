@@ -1,6 +1,7 @@
 package tn.vapex.domain.storage;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +20,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class LocalStorageServiceImpl implements StorageService {
 
     private final VapexProperties vapexProperties;
@@ -63,7 +65,7 @@ public class LocalStorageServiceImpl implements StorageService {
             fos.write(file.getBytes());
             fos.close();
         } catch (IOException exception) {
-            exception.printStackTrace();
+            log.warn(exception.getMessage());
             throw new FileUploadException();
         }
     }

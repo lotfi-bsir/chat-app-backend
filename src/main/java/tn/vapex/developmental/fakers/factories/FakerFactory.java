@@ -4,12 +4,13 @@ import com.github.javafaker.Faker;
 import tn.vapex.developmental.fakers.BufferedFaker;
 import tn.vapex.developmental.fakers.files.FakeFileFetcher;
 
+import java.security.SecureRandom;
 import java.util.Objects;
 import java.util.Random;
 
 public class FakerFactory {
 
-    private static final Random RANDOM = new Random();
+    private static final SecureRandom  RANDOM = new SecureRandom();
     private static FakerFactory instance = null;
 
     private FakerFactory() {

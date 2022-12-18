@@ -77,7 +77,7 @@ public class VerificationCodeChecker implements Checker {
 
     @Async
     void saveActivationCodeAsync(VerificationCode code) {
-        this.verificationCodeRepository.save(code);
+        verificationCodeRepository.save(code);
     }
 
 
