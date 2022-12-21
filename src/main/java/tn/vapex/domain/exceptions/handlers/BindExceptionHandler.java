@@ -1,5 +1,7 @@
 package tn.vapex.domain.exceptions.handlers;
 
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ControllerAdvice
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class BindExceptionHandler extends CustomExceptionHandler<BindException> {
     @Override
     @ExceptionHandler(BindException.class)

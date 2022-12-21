@@ -1,5 +1,7 @@
 package tn.vapex.domain.exceptions.handlers;
 
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -9,6 +11,7 @@ import tn.vapex.domain.exceptions.exceptions.ReferencedEntityDoesNotExistExcepti
 
 
 @ControllerAdvice
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class JpaObjectRetrievalFailureExceptionHandler extends CustomExceptionHandler<JpaObjectRetrievalFailureException> {
 
     @Override

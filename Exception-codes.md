@@ -5,7 +5,7 @@ Exception code range :
 |---------------------------|-------|------|------|
 | SecurityException         | 1100  | 1200 | 1104 |  
 | VerificationCodeException | 1300  | 1400 | 1305 | 
-| CommonException           | 1500  | 1600 | 1504 |
+| CommonException           | 1500  | 1600 | 1505 |
 
 
 
