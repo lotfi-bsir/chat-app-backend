@@ -1,5 +1,2 @@
-vapex:
-  security:
-    token:
-      access-token-expiration: 720 # 12 hours
+
 

@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.experimental.FieldNameConstants;
 import tn.vapex.core.security.UserRole;
 import tn.vapex.domain.entitites.User;
+import tn.vapex.domain.enums.Gender;
 import tn.vapex.domain.storage.rest.CustomFileDto;
 
 import java.io.Serializable;
@@ -17,9 +18,10 @@ import java.io.Serializable;
 @FieldNameConstants
 public class UserDto implements Serializable {
     private Long id;
-    private String phone;
+    private String email;
     private UserRole role = UserRole.ROLE_USER;
     private String firstName;
     private String lastName;
     private CustomFileDto photo;
+    private Gender gender;
 }

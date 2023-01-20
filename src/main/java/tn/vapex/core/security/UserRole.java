@@ -16,9 +16,7 @@ public enum UserRole {
      * Default role for new users
      */
     ROLE_USER(Sets.newHashSet(UserAuthority.USER)),
-    ROLE_CLIENT(Sets.newHashSet(UserAuthority.CLIENT,UserAuthority.USER)),
-    ROLE_DELIVERY_MAN(Sets.newHashSet(UserAuthority.DELIVERY_MAN,UserAuthority.CLIENT,UserAuthority.USER)),
-    ROLE_ADMIN(Sets.newHashSet(UserAuthority.ADMIN, UserAuthority.DELIVERY_MAN,UserAuthority.CLIENT ,UserAuthority.USER));
+    ROLE_ADMIN(Sets.newHashSet(UserAuthority.ADMIN ,UserAuthority.USER));
 
     private final Set<UserAuthority> permissions;
 

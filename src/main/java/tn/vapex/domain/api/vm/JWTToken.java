@@ -12,7 +12,11 @@ import tn.vapex.domain.validators.token.Token;
 @AllArgsConstructor
 public class JWTToken {
     @Token
-    private String accessToken;
-    @Token
-    private String refreshToken;
+    private String token;
+
+    public static JWTToken of(String token){
+        JWTToken jwtToken = new JWTToken();
+        jwtToken.setToken(token);
+        return jwtToken;
+    }
 }

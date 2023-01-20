@@ -1,20 +1,15 @@
 package tn.vapex.domain.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import tn.vapex.core.security.AuthFacade;
 import tn.vapex.core.security.UserRole;
 import tn.vapex.core.security.jwt.TokenManager;
-import tn.vapex.core.security.jwt.TokenType;
-import tn.vapex.core.sms.senders.VerificationCodeSmsSender;
-import tn.vapex.domain.api.vm.JWTToken;
-import tn.vapex.domain.code.ValidationCode;
-import tn.vapex.domain.code.VerificationCode;
-import tn.vapex.domain.code.VerificationCodeChecker;
-import tn.vapex.domain.commons.Checker;
 import tn.vapex.domain.entitites.User;
-import tn.vapex.domain.exceptions.exceptions.UserBannedException;
-import tn.vapex.domain.exceptions.exceptions.UserNotFoundException;
+import tn.vapex.domain.enums.Gender;
 import tn.vapex.domain.repositories.UserRepository;
+import tn.vapex.domain.storage.CustomFile;
 
 import java.util.Optional;
 
@@ -24,46 +19,39 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final TokenManager tokenManager;
+    private final AuthFacade authFacade;
+    private final PasswordEncoder passwordEncoder;
 
-    public void loginOrRegister(String phone) {
-        Optional<User> userOptional = userRepository.findByPhone(phone);
+    public String loginOrRegister(String email, CustomFile photo, Gender gender, String firstName, String lastName, String password) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
         User user;
         if (userOptional.isEmpty()) {
-            user = new User();
-            user.setPhone(phone);
-            user.setRole(UserRole.ROLE_CLIENT);
-        }else {
+            user = this.createUser(email, firstName, lastName, password, gender, photo);
+        } else {
             user = userOptional.get();
-            this.checkIfUserBanned(user);
         }
-        ValidationCode validationCode = new ValidationCode(VerificationCode.generateRandomKey());
-        user.setValidationCode(validationCode);
+
         this.userRepository.save(user);
-
-        VerificationCodeSmsSender smsSender = new VerificationCodeSmsSender(phone,validationCode.getCode());
-        smsSender.send();
+        return this.tokenManager.generateToken(email);
     }
 
-    public JWTToken validateLogin(String phone,int code){
-        User user = this.userRepository.findByPhone(phone).orElseThrow(UserNotFoundException::new);
 
-        Checker checker = new VerificationCodeChecker(code,user.getValidationCode());
-        checker.performChecks(true);
-
-        user.setValidationCode(null);
-        this.userRepository.save(user);
-
-        return this.tokenManager.generateAccessAndRefreshToken(phone);
+    public User getConnectedUser() {
+        return this.authFacade.getAuthenticated();
     }
 
-    public JWTToken refreshToken(String refreshToken) {
-        refreshToken = this.tokenManager.extractToken(refreshToken);
-        this.tokenManager.validateToken(refreshToken, TokenType.REFRESH_TOKEN);
-        String userPhone = this.tokenManager.getUserPhoneByToken(refreshToken, TokenType.REFRESH_TOKEN);
-        return this.tokenManager.generateAccessAndRefreshToken(userPhone);
+    private User createUser(String email, String firstName, String lastName, String password, Gender gender, CustomFile photo) {
+        User user = new User();
+        user.setEmail(email);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setPhoto(photo);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setRole(UserRole.ROLE_USER);
+        user.setGender(gender);
+        return user;
     }
 
-    public void checkIfUserBanned(User user) {
-        if (user.isBanned()) throw new UserBannedException();
-    }
+    ;
+
 }

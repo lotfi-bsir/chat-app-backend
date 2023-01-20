@@ -14,7 +14,7 @@ public interface UserDetailsMapper {
     public static UserDetails userToUserDetails(User user) {
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         user.getRole().getGrantedAuthorities().forEach(grantedAuthority -> authorities.add(new SimpleGrantedAuthority(grantedAuthority.getAuthority())));
-        return new org.springframework.security.core.userdetails.User(user.getPhone(), Strings.EMPTY, authorities);
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), Strings.EMPTY, authorities);
     }
 
 }

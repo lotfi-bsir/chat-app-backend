@@ -4,8 +4,8 @@ spring:
   datasource:
     type: com.mysql.cj.jdbc.MysqlDataSource
     username: root
-    password: ${VAPEX_DATABASE_PASSWORD}
-    url: jdbc:mysql://${VAPEX_DATABASE_HOST}:${VAPEX_DATABASE_PORT}/vapex?createDatabaseIfNotExist=true
+    password: siwar
+    url: jdbc:mysql://localhost:3305/chat?createDatabaseIfNotExist=true
     driver-class-name: com.mysql.cj.jdbc.Driver
   jackson:
     default-property-inclusion: non_null
@@ -21,6 +21,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
@@ -48,7 +49,7 @@ vapex:
   security:
     token:
       secret-key: PLACE_HOLDER_KEY_PLACE_HOLDER_KEY # SECURITY_SECRET_KEY
-      access-token-expiration: 30 # minutes
+      access-token-expiration: 262800 # minutes -> 6 months
       refresh-token-expiration: 262800 # minutes -> 6 months
   sms:
     enabled: false

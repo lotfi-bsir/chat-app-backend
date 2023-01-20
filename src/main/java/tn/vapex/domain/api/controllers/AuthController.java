@@ -3,15 +3,13 @@ package tn.vapex.domain.api.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tn.vapex.core.security.AuthFacade;
-import tn.vapex.core.security.jwt.LoginVM;
 import tn.vapex.domain.api.dtos.UserDto;
 import tn.vapex.domain.api.mappers.UserMapper;
 import tn.vapex.domain.api.vm.JWTToken;
-import tn.vapex.domain.api.vm.PhoneVM;
-import tn.vapex.domain.api.vm.RefreshTokenVM;
-import tn.vapex.domain.entitites.User;
+import tn.vapex.domain.api.vm.LoginOrRegisterVm;
 import tn.vapex.domain.services.AuthService;
+import tn.vapex.domain.storage.CustomFile;
+import tn.vapex.domain.storage.rest.CustomFileMapper;
 
 import javax.validation.Valid;
 
@@ -21,29 +19,17 @@ import javax.validation.Valid;
 public class AuthController {
 
     private final AuthService authService;
-    private final AuthFacade authFacade;
+    private final CustomFileMapper customFileMapper;
     private final UserMapper userMapper;
 
     @PostMapping("login")
-    public ResponseEntity<Void> loginOrRegister(@RequestBody @Valid PhoneVM phoneVM) {
-        this.authService.loginOrRegister(phoneVM.getPhone());
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("validate")
-    public ResponseEntity<JWTToken> validateLogin(@RequestBody @Valid LoginVM loginVM) {
-        return ResponseEntity.ok(this.authService.validateLogin(loginVM.getPhone(), loginVM.getCode()));
-    }
-
-    @PostMapping("refresh")
-    public ResponseEntity<JWTToken> getRefreshToken(@RequestBody RefreshTokenVM refreshTokenVM) {
-        return ResponseEntity.ok(this.authService.refreshToken(refreshTokenVM.getRefreshToken()));
+    public ResponseEntity<JWTToken> loginOrRegister(@RequestBody @Valid LoginOrRegisterVm vm) {
+        CustomFile image = this.customFileMapper.toEntity(vm.getPhoto());
+        return ResponseEntity.ok(JWTToken.of(this.authService.loginOrRegister(vm.getEmail(), image, vm.getGender(),vm.getFirstName(), vm.getLastName(),vm.getPassword())));
     }
 
     @GetMapping("me")
-    public ResponseEntity<UserDto> getAuthenticatedUser() {
-        User user = this.authFacade.getAuthenticated();
-        this.authService.checkIfUserBanned(user);
-        return ResponseEntity.ok(userMapper.toDto(user));
+    public ResponseEntity<UserDto> loginOrRegister() {
+        return ResponseEntity.ok(this.userMapper.toDto(this.authService.getConnectedUser()));
     }
 }

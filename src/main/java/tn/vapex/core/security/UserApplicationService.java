@@ -17,7 +17,7 @@ public class UserApplicationService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
-        User user = this.userRepository.findByPhone(phone).orElseThrow(UserNotFoundException::new);
+        User user = this.userRepository.findByEmail(phone).orElseThrow(UserNotFoundException::new);
         return UserDetailsMapper.userToUserDetails(user);
     }
 }

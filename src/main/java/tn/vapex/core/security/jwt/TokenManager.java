@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import tn.vapex.core.properties.VapexProperties;
 import tn.vapex.core.security.UserApplicationService;
-import tn.vapex.domain.api.vm.JWTToken;
 
 import java.security.Key;
 import java.util.Date;
@@ -41,8 +40,8 @@ public class TokenManager {
     }
 
 
-    private String generateAccessToken(String phone) {
-        UserDetails user = userApplicationService.loadUserByUsername(phone);
+    public String generateToken(String email) {
+        UserDetails user = userApplicationService.loadUserByUsername(email);
         return BEARER_PREFIX + Jwts.builder()
                 .setSubject(user.getUsername())
                 .claim(AUTHORITIES_KEY, this.getAuthorities(user))
@@ -58,16 +57,7 @@ public class TokenManager {
                 .map(GrantedAuthority::getAuthority).collect(Collectors.toList());
     }
 
-    private String generateRefreshToken(String phone) {
-        UserDetails user = userApplicationService.loadUserByUsername(phone);
-        return BEARER_PREFIX + Jwts.builder()
-                .setSubject(user.getUsername())
-                .claim(AUTHORITIES_KEY, this.getAuthorities(user))
-                .setIssuedAt(new Date())
-                .setExpiration(DateUtils.addMinutes(new Date(), this.properties.getSecurity().getToken().getRefreshTokenExpiration()))
-                .signWith(refreshTokenKey)
-                .compact();
-    }
+
 
     public void validateToken(String token, TokenType tokenType) {
         token = this.extractToken(token);
@@ -78,10 +68,6 @@ public class TokenManager {
     public String extractToken(@NonNull String authorizationHeader) {
         if (!authorizationHeader.startsWith(BEARER_PREFIX)) return authorizationHeader;
         return authorizationHeader.substring(BEARER_PREFIX.length());
-    }
-
-    public JWTToken generateAccessAndRefreshToken(String phone) {
-        return new JWTToken(this.generateAccessToken(phone), this.generateRefreshToken(phone));
     }
 
     public String getUserPhoneByToken(String token, TokenType tokenType) {

@@ -15,7 +15,7 @@ public class AuthFacadeImpl implements AuthFacade {
 
     @Override
     public User getAuthenticated() {
-        String phone = SecurityContextHolder.getContext().getAuthentication().getName();
-        return this.userRepository.findByPhone(phone).orElseThrow(UserNotFoundException::new);
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return this.userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
     }
 }
