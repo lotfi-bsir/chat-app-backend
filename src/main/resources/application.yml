@@ -41,6 +41,7 @@ management:
       exposure:
         include: [ '*' ]
 
+
 server:
   servlet:
     context-path: /api
@@ -70,3 +71,6 @@ vapex:
   data-loader:
     enabled: true
     factor: 5
+
+security:
+  allo

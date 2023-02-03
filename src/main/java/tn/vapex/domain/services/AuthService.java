@@ -1,6 +1,7 @@
 package tn.vapex.domain.services;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import tn.vapex.core.security.AuthFacade;
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthService {
 
     private final UserRepository userRepository;
@@ -35,6 +37,18 @@ public class AuthService {
         return this.tokenManager.generateToken(email);
     }
 
+    public String login(String email, String password) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        if (optionalUser.isEmpty()) {
+            return "userNotFound";
+        }
+        log.info(password);
+        log.info(optionalUser.get().getPassword());
+        if (passwordEncoder.matches(password, optionalUser.get().getPassword())) {
+            return this.tokenManager.generateToken(email);
+        }
+        return "passwordIncorrect";
+    }
 
     public User getConnectedUser() {
         return this.authFacade.getAuthenticated();
