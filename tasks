@@ -1,6 +1,0 @@
-- add sms validation
-- add user login
-- add AuthFaçade
-- clear sonarQube code smells
-
-- fix exception numbers + add exception numbers table
